@@ -32,7 +32,8 @@ function menuHtml($login = 0) {
         toReturn += '<a href="/liczacy/wyloguj">Wyloguj</a>';
     } else {
         toReturn += '<a href="/statystyki2">Statystyki</a>';
-        toReturn += '<a href="/login">Zaloguj</a>';
+        toReturn += '<a href="/login">Zaloguj do panelu</a>';
+        toReturn += '<a href="/loginliczacy">Zaloguj osoba licząca</a>';
     }
     return toReturn + '</div>';
 }
