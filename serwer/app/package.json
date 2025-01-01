@@ -1,0 +1,27 @@
+{
+    "name": "wosp",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "test": "nodemon index.js"
+    },
+    "keywords": [],
+    "author": "kry008",
+    "license": "MIT",
+    "dependencies": {
+        "body-parser": "^1.20.2",
+        "cookie": "^0.6.0",
+        "cors": "^2.8.5",
+        "discord-webhook-node": "^1.1.8",
+        "dotenv": "^16.3.1",
+        "express": "^4.18.2",
+        "mysql2": "^3.12.0",
+        "nodemailer": "^6.9.8",
+        "nodemon": "^3.0.2",
+        "csv-parser": "^3.0.0",
+        "express-fileupload": "^1.5.1",
+        "strip-bom-stream": "^4.0.0"
+    }
+}

@@ -1,0 +1,16 @@
+FROM mysql:8.0
+
+# Definiowanie argumentów, które można przekazać z docker-compose.yml
+ARG MYSQL_ROOT_PASSWORD
+ARG MYSQL_DATABASE
+ARG MYSQL_USER
+ARG MYSQL_PASSWORD
+
+# Ustawienie zmiennych środowiskowych na podstawie argumentów
+ENV MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+ENV MYSQL_DATABASE=${MYSQL_DATABASE}
+ENV MYSQL_USER=${MYSQL_USER}
+ENV MYSQL_PASSWORD=${MYSQL_PASSWORD}
+
+# Kopiowanie skryptu SQL do inicjalizacji bazy danych
+COPY app/baza-import.sql /docker-entrypoint-initdb.d/

@@ -1,0 +1,5 @@
+serwer/node_modules
+serwer/app/package-lock.json
+serwer/package-lock.json
+serwer/.env
+serwer/prod.env
