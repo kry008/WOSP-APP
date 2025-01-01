@@ -3,3 +3,9 @@ serwer/app/package-lock.json
 serwer/package-lock.json
 serwer/.env
 serwer/prod.env
+serwer/app/logs/*
+serwer/app/logs/*/*
+serwer/app/tmp/*
+serwer/logs/*
+serwer/logs/*/*
+serwer/tmp/*
