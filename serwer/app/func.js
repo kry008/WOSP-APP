@@ -257,6 +257,7 @@ function sendEmail(imie, nazwisko, suma, email)
 function checkSendEmail(email)
 {
     const nodemailer = require('nodemailer');
+    const fs = require('fs');
     const transporter = nodemailer.createTransport({
         host: process.env.SMTPHOST,
         port: process.env.SMTPPORT,
