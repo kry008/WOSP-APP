@@ -12,6 +12,17 @@ var con = mysql.createConnection({
     insecureAuth: true
 });
 
+var pool = mysql.createPool({
+    host: process.env.MYSQLHOST,
+    user: process.env.MYSQLUSER,
+    password: process.env.MYSQLPASS,
+    port: process.env.MYSQLPORT,
+    database: process.env.MYSQLDB,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+});
+
 let attempts = 0;
 const maxAttempts = 5;
 
@@ -105,13 +116,13 @@ function tryConnect() {
                 var login = req.body.login;
                 var password = req.body.password;
                 //sprawdź czy istnieje taki login i hasło
-                con.query('SELECT * FROM login WHERE login = ? AND haslo = SHA1(?) AND aktywne = 1', [login, password], function(err, result) {
+                pool.query('SELECT * FROM login WHERE login = ? AND haslo = SHA1(?) AND aktywne = 1', [login, password], function(err, result) {
                     if (err) throw err;
                     if (result.length > 0) {
                         //utwórz token
                         var token = makeid(32);
                         //zapisz token do bazy
-                        con.query('INSERT INTO tokeny (token, typ, userId) VALUES (?, 1, ?)', [token, result[0].id], function(err, result) {
+                        pool.query('INSERT INTO tokeny (token, typ, userId) VALUES (?, 1, ?)', [token, result[0].id], function(err, result) {
                             if (err) throw err;
                             //ustaw ciasteczko
                             res.setHeader('Set-Cookie', cookie.serialize('token', token, {
@@ -145,13 +156,13 @@ function tryConnect() {
             app.post('/loginliczacy', function(req, res) {
                 var password = req.body.password;
                 //sprawdź czy istnieje taki login i hasło
-                con.query('SELECT * FROM liczacy WHERE qr = ? AND aktywne = 1', [password], function(err, result) {
+                pool.query('SELECT * FROM liczacy WHERE qr = ? AND aktywne = 1', [password], function(err, result) {
                     if (err) throw err;
                     if (result.length > 0) {
                         //utwórz token
                         var token = makeid(32);
                         //zapisz token do bazy
-                        con.query('INSERT INTO tokenyLiczacy (token, typ, userId) VALUES (?, 1, ?)', [token, result[0].id], function(err, result) {
+                        pool.query('INSERT INTO tokenyLiczacy (token, typ, userId) VALUES (?, 1, ?)', [token, result[0].id], function(err, result) {
                             if (err) throw err;
                             //ustaw ciasteczko
                             res.setHeader('Set-Cookie', cookie.serialize('liczacy', token, {
@@ -204,7 +215,7 @@ function tryConnect() {
                 toReturn += '<table class="dane">';
                 //wypisz sumę zebranych pieniędzy, sumę poszczególnych nominałów
                 //pobierz wszystkie rozliczenia
-                con.query('SELECT * FROM rozliczenie WHERE aktywne = 1', function(err, result) {
+                pool.query('SELECT * FROM rozliczenie WHERE aktywne = 1', function(err, result) {
                     if (err) throw err;
                     var suma = 0;
                     var sumaTerminal = 0;
@@ -266,7 +277,7 @@ function tryConnect() {
                     //SELECT * FROM `SumaZebranaPrzezWolontariuszy` ORDER BY `SumaZebranaPrzezWolontariuszy`.`suma` ASC LIMIT 10;
                     toReturn += '<table class="dane">';
                     toReturn += '<tr><th>Wolontariusz</th><th>Suma</th></tr>';
-                    con.query('SELECT numerIdentyfikatora, imie, nazwisko, suma FROM `SumaZebranaPrzezWolontariuszy` ORDER BY `SumaZebranaPrzezWolontariuszy`.`suma` ASC LIMIT 10;', function(err, result) {
+                    pool.query('SELECT numerIdentyfikatora, imie, nazwisko, suma FROM `SumaZebranaPrzezWolontariuszy` ORDER BY `SumaZebranaPrzezWolontariuszy`.`suma` ASC LIMIT 10;', function(err, result) {
                         if (err) throw err;
                         result.forEach(function(row) {
                             toReturn += '<tr><td>' + row.numerIdentyfikatora + '</td><td>' + row.suma + '</td></tr>';
@@ -278,7 +289,7 @@ function tryConnect() {
                         toReturn += '<h2>Najwięcej puszek przeliczonych</h2>';
                         toReturn += '<table class="dane">';
                         toReturn += '<tr><th>Liczący</th><th>Suma</th></tr>';
-                        con.query("SELECT idLiczacego, imie, nazwisko, sumaPrzeliczona FROM `sumaPrzeliczona` ORDER BY `sumaPrzeliczona`.`sumaPrzeliczona` DESC LIMIT 10;", function(err, result) {
+                        pool.query("SELECT idLiczacego, imie, nazwisko, sumaPrzeliczona FROM `sumaPrzeliczona` ORDER BY `sumaPrzeliczona`.`sumaPrzeliczona` DESC LIMIT 10;", function(err, result) {
                             if (err) throw err;
                             result.forEach(function(row) {
                                 toReturn += '<tr><td>' + row.idLiczacego + '</td><td>' + row.sumaPrzeliczona + '</td></tr>';
@@ -298,7 +309,7 @@ function tryConnect() {
                 //sprawdź czy token istnieje i jest aktywny
                 var cookies = cookie.parse(req.headers.cookie || '');
                 var token = cookies.token;
-                con.query('UPDATE tokeny SET aktywny = 0 WHERE token = ?', [token], function(err, result) {
+                pool.query('UPDATE tokeny SET aktywny = 0 WHERE token = ?', [token], function(err, result) {
                     if (err) throw err;
                     res.redirect('/panel/login');
                     loger(fs, 'Wylogowano użytkownika ' + req.user.kto, 'info');
