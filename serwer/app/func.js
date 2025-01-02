@@ -38,7 +38,7 @@ function menuHtml($login = 0) {
     return toReturn + '</div>';
 }
 
-function footerHtml(login = 0) {
+function footerHtml(login = 0, email = 0) {
     var toReturn = '';
     if(login == 1)
     {
@@ -60,13 +60,15 @@ function footerHtml(login = 0) {
         toReturn += '<script>function openNav() {document.getElementById("mySidenav").style.width = "300px";}</script>';
         toReturn += '<script>function closeNav() {document.getElementById("mySidenav").style.width = "0";}</script>';
     }
-    toReturn += '<script>function wroc() {history.back();}</script>';
+    if(login != 0)
+        toReturn += '<script>function wroc() {history.back();}</script>';
     toReturn += '<footer>';
+    info = email != 1 ? "Jeżeli chcesz wesprzeć autora, możesz to wykonać na <a href='https://patronite.pl/kry008' target='_blank'>Patronite</a>" : '';
     if (new Date().getFullYear() > 2023)
         toReturn += '<span>Stworzone przez <a href="https://kry008.xyz">KRY008</a> dla sztabu '+ process.env.SZTAB + ' &copy; 2023-' + new Date().getFullYear() + '';
     else
         toReturn += '<span>Stworzone przez <a href="https://kry008.xyz">KRY008</a> dla sztabu '+ process.env.SZTAB + ' &copy; 2023';
-    return toReturn + "<br>Wersja programu: " + process.env.VERSION + '</span></footer></div></body></html>';
+    return toReturn + "<br>Wersja programu: " + process.env.VERSION + '<br>'+ info +'</span></footer></div></body></html>';
 
     
 }
@@ -241,7 +243,7 @@ function sendEmail(imie, nazwisko, suma, email)
         from: process.env.SMTPLOGIN,
         to: email,
         subject: 'Twoje rozliczenie w ' + process.env.NRFINALU + '. Finale WOŚP',
-        html: '<img src="' + process.env.LOGO + '" height="150px" style="display: block; margin-left: auto; margin-right: auto;"><h1 style="text-align: center;">Rozliczenie</h1><h2 style="text-align: center;">Witaj ' + imie + ' ' + nazwisko + ',<br>Twoja suma z rozliczenia to: ' + suma + ' zł.</h2><p style="text-align: center;">Dziękujemy za udział w WOŚP!</p><p style="text-align: center;">Pozdrawiamy,<br>' + process.env.SZTAB + '</p>' + footerHtml()
+        html: '<img src="' + process.env.LOGO + '" height="150px" style="display: block; margin-left: auto; margin-right: auto;"><h1 style="text-align: center;">Rozliczenie</h1><h2 style="text-align: center;">Witaj ' + imie + ' ' + nazwisko + ',<br>Twoja suma z rozliczenia to: ' + suma + ' zł.</h2><p style="text-align: center;">Dziękujemy za udział w WOŚP!</p><p style="text-align: center;">Pozdrawiamy,<br>' + process.env.SZTAB + '</p>' + footerHtml(0,1)
     };
     transporter.sendMail(mailOptions, function(error, info){
         if (error) {
@@ -272,7 +274,7 @@ function checkSendEmail(email)
         from: process.env.SMTPLOGIN,
         to: email,
         subject: 'Twoje rozliczenie w ' + process.env.NRFINALU + '. Finale WOŚP',
-        html: '<img src="' + process.env.LOGO + '" height="150px" style="display: block; margin-left: auto; margin-right: auto;"><h1 style="text-align: center;">Rozliczenie</h1><h2 style="text-align: center;">Witaj Test,<br>Twoja suma z rozliczenia to: 0 zł.</h2><p style="text-align: center;">Dziękujemy za udział w WOŚP!</p><p style="text-align: center;">Pozdrawiamy,<br>' + process.env.SZTAB + '</p>' + footerHtml()
+        html: '<img src="' + process.env.LOGO + '" height="150px" style="display: block; margin-left: auto; margin-right: auto;"><h1 style="text-align: center;">Rozliczenie</h1><h2 style="text-align: center;">Witaj Test,<br>Twoja suma z rozliczenia to: 0 zł.</h2><p style="text-align: center;">Dziękujemy za udział w WOŚP!</p><p style="text-align: center;">Pozdrawiamy,<br>' + process.env.SZTAB + '</p>' + footerHtml(0,1)
     };
     transporter.sendMail(mailOptions, function(error, info){
         if (error) {
