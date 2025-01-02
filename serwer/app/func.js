@@ -62,7 +62,7 @@ function footerHtml(login = 0, email = 0) {
     }
     if(login != 0)
         toReturn += '<script>function wroc() {history.back();}</script>';
-    toReturn += '<footer>';
+    toReturn += '<footer style="text-align: center">';
     info = email != 1 ? "Jeżeli chcesz wesprzeć autora, możesz to wykonać na <a href='https://patronite.pl/kry008' target='_blank'>Patronite</a>" : '';
     if (new Date().getFullYear() > 2023)
         toReturn += '<span>Stworzone przez <a href="https://kry008.xyz">KRY008</a> dla sztabu '+ process.env.SZTAB + ' &copy; 2023-' + new Date().getFullYear() + '';
