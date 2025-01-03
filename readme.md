@@ -52,3 +52,6 @@ Przykładowo Eset:
 - Jeżeli wyjdzie niezaufana sieć zmienić na "Zmień na typ sieci zaufaną"
 - Kliknąć na urządzenie, które ma być zaufane
 - W regułach kliknąć "Zezwól/Odblokuj" przy "Docker for Windows" lub "WSL"
+
+## Postanowienia licencyjne
+[https://git.kry008.xyz/kry008/WOSP-APP/src/branch/main/Licence.md](https://git.kry008.xyz/kry008/WOSP-APP/src/branch/main/Licence.md)
