@@ -1,3 +1,4 @@
+cd serwer
 # Sprawdzenie lokalnego adresu IP
 $LocalIP = (Get-NetIPAddress -AddressFamily IPv4 -InterfaceAlias "Ethernet*").IPAddress
 if (-not $LocalIP) {
