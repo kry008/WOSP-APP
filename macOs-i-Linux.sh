@@ -1,54 +1,49 @@
 #!/bin/bash
 cd serwer
-# Funkcja do sprawdzania dostępności polecenia
-command_exists() {
-    command -v "$1" >/dev/null 2>&1
-}
-
-# Funkcja do uruchamiania polecenia na różnych systemach
-run_command() {
-    if [ "$OS" = "Windows_NT" ]; then
-        cmd.exe /C "$1"
-    else
-        eval "$1"
-    fi
-}
-
-# Sprawdzenie systemu operacyjnego
-if [ "$OS" = "Windows_NT" ]; then
-    echo "Wykryto system Windows."
-    WINDOWS=true
+# Sprawdzanie lokalnego adresu IP (dla macOS i Linux)
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS
+    local_ip=$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1 2>/dev/null)
 else
-    echo "Wykryto system Unix/MacOS."
-    WINDOWS=false
+    # Linux
+    local_ip=$(hostname -I | awk '{print $1}')
 fi
 
-# Sprawdź czy jest dostępne `docker compose`
-if command_exists "docker" && docker compose version >/dev/null 2>&1; then
-    echo "Docker Compose dostępny jako 'docker compose'."
-    COMPOSE_COMMAND="docker compose"
-
-# Sprawdź czy jest dostępne `docker-compose`
-elif command_exists "docker-compose"; then
-    echo "Docker Compose dostępny jako 'docker-compose'."
-    COMPOSE_COMMAND="docker-compose"
-
-# Jeśli brak obu, wyświetl komunikat i zakończ
-else
-    echo "Docker Compose nie jest zainstalowany. Zainstaluj go przed uruchomieniem tego skryptu."
+if [ -z "$local_ip" ]; then
+    echo "Nie udało się znaleźć lokalnego adresu IP."
     exit 1
 fi
 
-# Uruchomienie docker compose up
-if [ "$WINDOWS" = true ]; then
-    run_command "$COMPOSE_COMMAND up --build -d"
+# Sprawdzanie dostępności docker-compose lub docker compose
+if command -v docker-compose &> /dev/null; then
+    compose_command="docker-compose"
+elif docker compose version &> /dev/null; then
+    compose_command="docker compose"
 else
-    $COMPOSE_COMMAND up --build -d
+    echo "Nie znaleziono 'docker-compose' ani 'docker compose'. Zainstaluj jedno z nich i spróbuj ponownie."
+    exit 1
 fi
+
+echo "Znaleziono narzędzie: $compose_command"
+
+# Sprawdzanie czy plik docker-compose.yml istnieje
+if [ ! -f "docker-compose.yml" ]; then
+    echo "Plik docker-compose.yml nie został znaleziony w bieżącym katalogu."
+    exit 1
+fi
+
+# Uruchamianie kontenera
+echo "Uruchamianie kontenera z pliku docker-compose.yml..."
+$compose_command up -d
 
 if [ $? -eq 0 ]; then
-    echo "Docker Compose został uruchomiony pomyślnie."
+    echo "Kontener został uruchomiony pomyślnie."
 else
-    echo "Wystąpił błąd podczas uruchamiania Docker Compose."
+    echo "Wystąpił błąd podczas uruchamiania kontenera."
     exit 1
 fi
+
+
+echo "#################################################"
+echo "Lokalny adres IP: $local_ip"
+echo "#################################################"
