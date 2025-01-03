@@ -113,7 +113,6 @@ panelRouter.get('/osobyLiczace', function(req, res) {
         loger(fs, 'Wyświetlono listę osób liczących', 'info');
     });
 });
-
 panelRouter.get('/kod', function(req, res) {
     var id = req.query.id;
     //SELECT qr FROM liczacy WHERE id = ?
@@ -141,10 +140,6 @@ panelRouter.get('/kod', function(req, res) {
         }
     });
 });
-
-    
-
-
 panelRouter.get('/dodajOsobeLiczaca', function(req, res) {
     var toReturn = headerHtml();
     toReturn += menuHtml(1);
@@ -206,7 +201,12 @@ panelRouter.get('/listaWolontariuszy', function(req, res) {
         result.forEach(function(row) {
             //jeżeli zaznacz, to kolor wiersza na rgba(0, 255, 0, 0.5)
             toReturn += '<tr style="' + (row.zaznacz == 1 ? 'background-color: rgba(0, 255, 0, 0.5);' : '') + '">';
-            toReturn += '<td>' + row.numerIdentyfikatora + '</td>';
+            toReturn += '<td>';
+            if(row.puszkaWydana == 1)
+                toReturn += '<span style="text-decoration: underline;">' + row.numerIdentyfikatora + '</span>';
+            else
+                toReturn += row.numerIdentyfikatora;
+            toReturn += '</td>';
             toReturn += '<td>' + row.imie + '</td>';
             toReturn += '<td>' + row.nazwisko + '</td>';
             toReturn += '<td>' + row.discord + '</td>';
@@ -254,6 +254,7 @@ panelRouter.get('/edytujWolontariusza', function(req, res) {
             toReturn += '<tr><td>PESEL</td><td><input type="text" name="pesel" value="' + result[0].pesel + '"></td></tr>';
             toReturn += '<tr><td>Terminal</td><td><input type="checkbox" name="terminal" value="1"' + (result[0].terminal == 1 ? ' checked' : '') + '></td></tr>';
             toReturn += '<tr><td>Rodzic</td><td><input type="text" name="rodzic" value="' + result[0].rodzic + '"></td></tr>';
+            toReturn += '<tr><td>Puszka wydana</td><td><input type="checkbox" name="puszka" value="1"' + (result[0].puszkaWydana == 1 ? ' checked' : '') + '></td></tr>';
             toReturn += '</table>';
             toReturn += '<input type="submit" value="Zapisz">';
             toReturn += '</form>';
@@ -272,9 +273,10 @@ panelRouter.post('/edytujWolontariusza', function(req, res) {
     var telefon = req.body.telefon;
     var pesel = req.body.pesel;
     var terminal = req.body.terminal == 1 ? 1 : 0;
+    var puszka = req.body.puszka == 1 ? 1 : 0;
     var rodzic = req.body.rodzic;
     //zapisz dane
-    con.query('UPDATE wolontariusz SET imie = ?, nazwisko = ?, discord = ?, email = ?, telefon = ?, pesel = ?, terminal = ?, rodzic = ? WHERE id = ?', [imie, nazwisko, discord, email, telefon, pesel, terminal, rodzic, id], function(err, result) {
+    con.query('UPDATE wolontariusz SET imie = ?, nazwisko = ?, discord = ?, email = ?, telefon = ?, pesel = ?, terminal = ?, rodzic = ?, puszkaWydana = ? WHERE id = ?', [imie, nazwisko, discord, email, telefon, pesel, terminal, rodzic, puszka, id], function(err, result) {
         if (err) throw err;
         res.redirect('/panel/listaWolontariuszy');
         loger(fs, 'Edytowano wolontariusza o id: ' + id, 'info');
@@ -297,6 +299,7 @@ panelRouter.get('/dodajWolontariusza', function(req, res) {
     toReturn += '<tr><td>Terminal</td><td><input type="checkbox" name="terminal" value="0"></td></tr>';
     toReturn += '<tr><td>Rodzic</td><td><input type="text" name="rodzic"></td></tr>';
     toReturn += '<tr><td>Zaznacz na liście</td><td><input type="checkbox" name="zaznacz" value="0"></td></tr>';
+    toReturn += '<tr><td>Puszka wydana</td><td><input type="checkbox" name="puszka" value="0"></td></tr>';
     toReturn += '</table>';
     toReturn += '<input type="submit" value="Dodaj">';
     toReturn += '</form>';
@@ -316,6 +319,7 @@ panelRouter.post('/dodajWolontariusza', function(req, res) {
     var terminal = req.body.terminal == 1 ? 1 : 0;
     var rodzic = req.body.rodzic;
     var zaznacz = req.body.zaznacz == 1 ? 1 : 0;
+    var puszka = req.body.puszka == 1 ? 1 : 0;
     con.query('SELECT * FROM wolontariusz WHERE numerIdentyfikatora = ? OR pesel = ?', [numerIdentyfikatora, pesel], function(err, result) {
         if (err) throw err;
         if (result.length > 0) {
@@ -324,7 +328,7 @@ panelRouter.post('/dodajWolontariusza', function(req, res) {
             loger(fs, 'Nieudana próba dodania wolontariusza o numerze identyfikatora: ' + numerIdentyfikatora + ' lub peselu: ' + pesel.substring(0, 3) + '########', 'warning');
         } else {
             //nie istnieje
-            con.query('INSERT INTO wolontariusz (numerIdentyfikatora, imie, nazwisko, discord, email, telefon, pesel, terminal, rodzic, zaznacz) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [numerIdentyfikatora, imie, nazwisko, discord, email, telefon, pesel, terminal, rodzic, zaznacz], function(err, result) {
+            con.query('INSERT INTO wolontariusz (numerIdentyfikatora, imie, nazwisko, discord, email, telefon, pesel, terminal, rodzic, zaznacz, puszkaWydana) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [numerIdentyfikatora, imie, nazwisko, discord, email, telefon, pesel, terminal, rodzic, zaznacz, puszka], function(err, result) {
                 if (err) throw err;
                 res.redirect('/panel/listaWolontariuszy');
                 loger(fs, 'Dodano wolontariusza o numerze identyfikatora: ' + numerIdentyfikatora + ' i peselu: ' + pesel.substring(0, 3) + '########', 'info');

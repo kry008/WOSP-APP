@@ -425,6 +425,7 @@ CREATE TABLE IF NOT EXISTS \`wolontariusz\` (
   \`ostatniaZmiana\` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   \`aktywny\` tinyint(4) NOT NULL DEFAULT 1,
   \`zaznacz\` int(11) NOT NULL DEFAULT 0,
+  \`puszkaWydana\` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (\`id\`)
 ) ENGINE=InnoDB;
 DROP TABLE IF EXISTS \`sumaPrzeliczona\`;
