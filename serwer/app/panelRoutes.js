@@ -251,7 +251,7 @@ panelRouter.get('/edytujWolontariusza', function(req, res) {
             toReturn += '<tr><td>Discord</td><td><input type="text" name="discord" value="' + result[0].discord + '"></td></tr>';
             toReturn += '<tr><td>Email</td><td><input type="text" name="email" value="' + result[0].email + '"></td></tr>';
             toReturn += '<tr><td>Telefon</td><td><input type="text" name="telefon" value="' + result[0].telefon + '"></td></tr>';
-            toReturn += '<tr><td>PESEL</td><td><input type="text" name="pesel" value="' + result[0].pesel + '"></td></tr>';
+            toReturn += '<tr><td>PESEL</td><td><details><summary>PESEL</summary><input type="text" name="pesel" value="' + result[0].pesel + '"></details></td></tr>';
             toReturn += '<tr><td>Terminal</td><td><input type="checkbox" name="terminal" value="1"' + (result[0].terminal == 1 ? ' checked' : '') + '></td></tr>';
             toReturn += '<tr><td>Rodzic</td><td><input type="text" name="rodzic" value="' + result[0].rodzic + '"></td></tr>';
             toReturn += '<tr><td>Puszka wydana</td><td><input type="checkbox" name="puszka" value="1"' + (result[0].puszkaWydana == 1 ? ' checked' : '') + '></td></tr>';
@@ -1731,9 +1731,9 @@ panelRouter.get('/wyslijEmaile', function(req, res) {
     toReturn += '<div class="content">';
     toReturn += '<h1>Wysyłanie emaili</h1>';
     toReturn += '<form action="/panel/wyslijEmaile" method="POST">';
-    toReturn += '<table class="dane">';
+    toReturn += '<table class="dane" style="width: 100%;">';
     toReturn += '<tr><td>Temat</td><td><input type="text" name="temat"></td></tr>';
-    toReturn += '<tr><td>Treść</td><td><div id="editor"></div><textarea name="tresc" style="display:none;"></textarea></td></tr>';
+    toReturn += '<tr><td>Treść</td><td><div id="editor" style="min-height: 500px"></div><textarea name="tresc" style="display:none;"></textarea></td></tr>';
     toReturn += '</table>';
     toReturn += '<input type="submit" value="Wyślij">';
     toReturn += '</form>';
@@ -1742,18 +1742,22 @@ panelRouter.get('/wyslijEmaile', function(req, res) {
     toReturn += '<script>';
     toReturn += 'var quill = new Quill("#editor", {';
     toReturn += 'theme: "snow",';
-    toReturn += 'modules: {';
-    toReturn += 'toolbar: [';
-    toReturn += '[{ header: [1, 2, 3, false] }],';
-    toReturn += `['bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block'],`;
-    toReturn += `[{ list: 'ordered'}`;
-    toReturn += `, { list: 'bullet' }]`;
-    toReturn += `['link', 'image', 'video']`;
-    toReturn += ']';
-    toReturn += '}';
     toReturn += '});';
+    toReturn += 'quill.on("text-change", function() {';
+    toReturn += 'document.getElementsByName("tresc")[0].value = quill.root.innerHTML;';
+    toReturn += '});';
+    toReturn += '</script>';
+
     toReturn += '</div>';
     toReturn += footerHtml(1);
+    res.send(toReturn);
+});
+//wyświetl post
+panelRouter.post('/wyslijEmaile', function(req, res) {
+    //pobierz temat i treść emaila, a potem bobierz wszystkie emaile (unikalne) i wyslij
+    var temat = req.body.temat;
+    var tresc = req.body.tresc;
+    res.send({temat: temat, tresc: tresc});
 });
 
 module.exports = panelRouter;
