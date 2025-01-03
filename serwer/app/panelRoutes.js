@@ -32,7 +32,7 @@ app.use(fileUpload({
 }));
 
 //import functions from func.js
-const {headerHtml, menuHtml, footerHtml, checkPesel, loger, telefon, sendToDiscord, sendEmail, makeid, checkSendEmail, baza} = require('./func.js');
+const {headerHtml, menuHtml, footerHtml, checkPesel, loger, telefon, sendToDiscord, sendEmail, makeid, checkSendEmail, baza, massEmail} = require('./func.js');
 //function loger(fs, text, type = 'info')
 panelRouter.use(function(req, res, next) {
     var cookies = cookie.parse(req.headers.cookie || '');
@@ -1722,5 +1722,38 @@ panelRouter.all('/usunWolontariuszy', function(req, res) {
         res.redirect('/panel/listaWolontariuszy');
     });
 })
+
+panelRouter.get('/wyslijEmaile', function(req, res) {
+    //pobierz tytul i treść emaila, a potem bobierz wszystkie emaile (unikalne) i wyslij
+    //treść uzupełnij za pomocą quill
+    var toReturn = headerHtml("Wysyłanie emaili");
+    toReturn += menuHtml(1);
+    toReturn += '<div class="content">';
+    toReturn += '<h1>Wysyłanie emaili</h1>';
+    toReturn += '<form action="/panel/wyslijEmaile" method="POST">';
+    toReturn += '<table class="dane">';
+    toReturn += '<tr><td>Temat</td><td><input type="text" name="temat"></td></tr>';
+    toReturn += '<tr><td>Treść</td><td><div id="editor"></div><textarea name="tresc" style="display:none;"></textarea></td></tr>';
+    toReturn += '</table>';
+    toReturn += '<input type="submit" value="Wyślij">';
+    toReturn += '</form>';
+    toReturn += '<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />';
+    toReturn += '<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>';
+    toReturn += '<script>';
+    toReturn += 'var quill = new Quill("#editor", {';
+    toReturn += 'theme: "snow",';
+    toReturn += 'modules: {';
+    toReturn += 'toolbar: [';
+    toReturn += '[{ header: [1, 2, 3, false] }],';
+    toReturn += `['bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block'],`;
+    toReturn += `[{ list: 'ordered'}`;
+    toReturn += `, { list: 'bullet' }]`;
+    toReturn += `['link', 'image', 'video']`;
+    toReturn += ']';
+    toReturn += '}';
+    toReturn += '});';
+    toReturn += '</div>';
+    toReturn += footerHtml(1);
+});
 
 module.exports = panelRouter;

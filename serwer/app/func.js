@@ -454,6 +454,38 @@ CREATE OR REPLACE VIEW \`sumy\`  AS SELECT \`rozliczenie\`.\`wolontariuszID\` AS
     return toSend;
 }
 
+function massEmail($emaile = [], $tytul = "Powiadomienie od sztabu", $tresc = "Brak treści wiadomości")
+{
+    const nodemailer = require('nodemailer');
+    const transporter = nodemailer.createTransport({
+        host: process.env.SMTPHOST,
+        port: process.env.SMTPPORT,
+        secure: true,
+        auth: {
+            user: process.env.SMTPLOGIN,
+            pass: process.env.SMTPPASS
+        }
+    });
+    $emaile.forEach(element => {
+        const mailOptions = {
+            from: process.env.SMTPLOGIN,
+            bcc: element,
+            subject: $tytul,
+            html: '<img src="' + process.env.LOGO + '" height="150px" style="display: block; margin-left: auto; margin-right: auto;"><h1 style="text-align: center;">' + $tytul + '</h1><br><div id="main">' + $tresc + '</div><p style="text-align: center;">Pozdrawiamy,<br>' + process.env.SZTAB + '</p>' + footerHtml(0,1)
+        };
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                console.log(error);
+                loger(fs, 'Błąd wysyłania maila do ' + element, 'error');
+            } else {
+                console.log('Email został wysłany: ' + info.response);
+                loger(fs, 'Email został wysłany do ' + element + ' ' + info.response, 'info');
+            }
+        });
+    });
+}
+
+
 exports.headerHtml = headerHtml;
 exports.menuHtml = menuHtml;
 exports.footerHtml = footerHtml;
@@ -466,3 +498,4 @@ exports.sendToDiscord = sendToDiscord;
 exports.sendEmail = sendEmail;
 exports.checkSendEmail = checkSendEmail;
 exports.baza = baza;
+exports.massEmail = massEmail;
