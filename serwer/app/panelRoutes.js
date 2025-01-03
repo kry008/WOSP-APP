@@ -1732,7 +1732,7 @@ panelRouter.get('/wyslijEmaile', function(req, res) {
     toReturn += '<h1>Wysyłanie emaili</h1>';
     toReturn += '<form action="/panel/wyslijEmaile" method="POST">';
     toReturn += '<table class="dane" style="width: 100%;">';
-    toReturn += '<tr><td>Temat</td><td><input type="text" name="temat"></td></tr>';
+    toReturn += '<tr><td>Temat</td><td><input type="text" name="temat" value="Powiadomienie od sztabu"></td></tr>';
     toReturn += '<tr><td>Treść</td><td><div id="editor" style="min-height: 500px"></div><textarea name="tresc" style="display:none;"></textarea></td></tr>';
     toReturn += '</table>';
     toReturn += '<input type="submit" value="Wyślij">';
@@ -1757,7 +1757,24 @@ panelRouter.post('/wyslijEmaile', function(req, res) {
     //pobierz temat i treść emaila, a potem bobierz wszystkie emaile (unikalne) i wyslij
     var temat = req.body.temat;
     var tresc = req.body.tresc;
-    res.send({temat: temat, tresc: tresc});
+    tresc = tresc.replace(/`/g, "'");
+    temat = temat.replace(/`/g, "'");
+    var emaileWolontariuszy = [];
+    con.query("SELECT DISTINCT `email` FROM `wolontariusz`", function(err, result) {
+        if (err) throw err;
+        result.forEach(function(row) {
+            emaileWolontariuszy.push(row.email);
+        });
+        var ile = massEmail(emaileWolontariuszy, temat, tresc);
+        var toReturn = headerHtml("Wysyłanie emaili");
+        toReturn += menuHtml(1);
+        toReturn += '<div class="content">';
+        toReturn += '<h1>Wysyłanie emaili</h1>';
+        toReturn += '<p>Wysłano ' + ile + ' emaili</p>';
+        toReturn += '</div>';
+        toReturn += footerHtml(1);
+        res.send(toReturn);
+    });
 });
 
 module.exports = panelRouter;

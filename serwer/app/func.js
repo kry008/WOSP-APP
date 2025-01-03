@@ -454,8 +454,10 @@ CREATE OR REPLACE VIEW \`sumy\`  AS SELECT \`rozliczenie\`.\`wolontariuszID\` AS
     return toSend;
 }
 
-function massEmail($emaile = [], $tytul = "Powiadomienie od sztabu", $tresc = "Brak treści wiadomości")
+function massEmail(emaile = [], tytul = "Powiadomienie od sztabu", tresc = "Brak treści wiadomości")
 {
+    console.log('Wysyłanie maili do ' + emaile.length + ' osób');
+    
     const nodemailer = require('nodemailer');
     const transporter = nodemailer.createTransport({
         host: process.env.SMTPHOST,
@@ -466,12 +468,12 @@ function massEmail($emaile = [], $tytul = "Powiadomienie od sztabu", $tresc = "B
             pass: process.env.SMTPPASS
         }
     });
-    $emaile.forEach(element => {
+    emaile.forEach(element => {
         const mailOptions = {
             from: process.env.SMTPLOGIN,
             bcc: element,
-            subject: $tytul,
-            html: '<img src="' + process.env.LOGO + '" height="150px" style="display: block; margin-left: auto; margin-right: auto;"><h1 style="text-align: center;">' + $tytul + '</h1><br><div id="main">' + $tresc + '</div><p style="text-align: center;">Pozdrawiamy,<br>' + process.env.SZTAB + '</p>' + footerHtml(0,1)
+            subject: tytul,
+            html: '<img src="' + process.env.LOGO + '" height="150px" style="display: block; margin-left: auto; margin-right: auto;"><h1 style="text-align: center;">' + $tytul + '</h1><br><div id="main">' + tresc + '</div><p style="text-align: center;">Pozdrawiamy,<br>' + process.env.SZTAB + '</p>' + footerHtml(0,1)
         };
         transporter.sendMail(mailOptions, function(error, info){
             if (error) {
@@ -483,6 +485,7 @@ function massEmail($emaile = [], $tytul = "Powiadomienie od sztabu", $tresc = "B
             }
         });
     });
+    return emaile.length;
 }
 
 
