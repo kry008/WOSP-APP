@@ -45,5 +45,5 @@ fi
 
 
 echo "#################################################"
-echo "Lokalny adres IP: $local_ip"
+echo "Lokalny adres aplikacji: http://$local_ip:8880"
 echo "#################################################"
