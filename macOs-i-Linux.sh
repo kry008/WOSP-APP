@@ -34,7 +34,7 @@ fi
 
 # Uruchamianie kontenera
 echo "Uruchamianie kontenera z pliku docker-compose.yml..."
-$compose_command up -d
+$compose_command up --build -d
 
 if [ $? -eq 0 ]; then
     echo "Kontener został uruchomiony pomyślnie."
