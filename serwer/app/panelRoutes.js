@@ -69,6 +69,7 @@ panelRouter.get('/home', function(req, res) {
     toReturn += '<a class="borderColorRed" href="/panel/uniewaznijTokeny">Unieważnij wszystkie tokeny</a>';
     toReturn += '<a class="borderColorBlack" href="/panel/import">Importuj z BSS Wolontariuszy</a>';
     toReturn += '<a class="borderColorBlack" href="/panel/sprawdzenieWysylki">Sprawdzenie wysyłki powiadomień</a>';
+    toReturn += '<a class="borderColorBlack" href="/panel/wyslijEmaile">Wyślij wiadomość do wszystkich</a>';
     //toReturn += '<a class="borderColorBlack" href="/panel/eksport">Wykonaj kopię zapasową</a>';
     toReturn += '<a class="borderColorPurple" href="/panel/haslo">Zmień hasło</a>';
     toReturn += '<a class="borderColorPurple" href="/logout">Wyloguj się</a>';
