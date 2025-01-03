@@ -53,5 +53,8 @@ Przykładowo Eset:
 - Kliknąć na urządzenie, które ma być zaufane
 - W regułach kliknąć "Zezwól/Odblokuj" przy "Docker for Windows" lub "WSL"
 
+## Podoba się program?
+Wesprzyj mnie na [Patronite](https://patronite.pl/kry008) lub [Ko-fi](https://ko-fi.com/kry008)
+
 ## Postanowienia licencyjne
 [https://git.kry008.xyz/kry008/WOSP-APP/src/branch/main/Licence.md](https://git.kry008.xyz/kry008/WOSP-APP/src/branch/main/Licence.md)
