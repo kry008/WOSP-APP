@@ -37,3 +37,5 @@ try {
 Write-Host "#####################################################" -ForegroundColor Green
 Write-Host "Lokalny adres aplikacji: http://$LocalIP:8880" -ForegroundColor Green
 Write-Host "#####################################################" -ForegroundColor Green
+
+Read-Host -Prompt "Naciśnij Enter, aby zakończyć..."
