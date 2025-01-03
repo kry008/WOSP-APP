@@ -19,5 +19,21 @@ Pomocnik dla sztabu przy rozliczeniach wolontariuszy
 
 ## Instalacja
 Uruchomić skrypt odpowiednio dla systemu operacyjnego:
-- Windows: `windows.ps1`
+- Windows: `windows.cmd`
 - MacOS lub Linux: `macOs-i-Linux.sh`
+
+## Znane problemy Windows
+1. Zamykająca się od razu konsola
+Jeżeli skryp od razu zamyka się, trzeba uruchomić powershell (menu start i zacząć wpisywać powershell) jako administrator i wpisać komendę:
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+2. Inne urządzenia w sieci lokalnej nie mogą się połączyć
+W takim przypadku trzeba wyłączyć lub zezwolić innym urządzeniom na łączenie się przez zaporę systemową na Windowsie lub w systemia antywirusowym.
+Przykładowo Eset: 
+- Otwórz program ESET Security
+- Kliknij na Narzędzia
+- Inspekcja sieci
+- Jeżeli wyjdzie niezaufana sieć zmienić na "Zmień na typ sieci zaufaną"
+- Kliknąć na urządzenie, które ma być zaufane
+- W regułach kliknąć "Zezwól/Odblokuj" przy "Docker for Windows" lub "WSL"
