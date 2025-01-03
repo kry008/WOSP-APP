@@ -22,6 +22,16 @@ Uruchomić skrypt odpowiednio dla systemu operacyjnego:
 - Windows: `windows.cmd`
 - MacOS lub Linux: `macOs-i-Linux.sh`
 
+
+## Jak znaleźć adres IP
+- Linux i MacOS: skrypt na końcu pokaże adres IP wraz z adresem url aby dostać się do aplikacji z sieci lokalnej
+- Windows:
+    1. Wejść w ustawienia systemu
+    2. Wejść w sieć i internet
+    3. Na górze kliknąć właściwości
+    4. Przewinąć w dół i znaleźć adres IPv4
+    5. Adres do łącznia się z aplikacją to `http://ADRESIP:8880`
+
 ## Znane problemy Windows
 1. Zamykająca się od razu konsola
 Jeżeli skryp od razu zamyka się, trzeba uruchomić powershell (menu start i zacząć wpisywać powershell) jako administrator i wpisać komendę:
