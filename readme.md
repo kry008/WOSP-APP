@@ -18,9 +18,14 @@ Pomocnik dla sztabu przy rozliczeniach wolontariuszy
 - Instalując na **Windows** zaznaczyć opcję "Use the WSL 2 instead of Hyper-V" w oknie instalatora.
 
 ## Instalacja
-Uruchomić skrypt odpowiednio dla systemu operacyjnego:
-- Windows: `windows.cmd`
-- MacOS lub Linux: `macOs-i-Linux.sh`
+1. Wejść w folder `serwer`
+2. Skopiować plik `example.env` i nazwać go `.env`
+3. Uzupełnić pola `MYSQL_ROOT_PASSWORD` oraz `MYSQL_PASSWORD` w pliku `.env`
+4. Skopiować plik `example.prod.env` i nazwać go `prod.env`
+5. Zmienić oznaczone linie na własne dane
+6. Uruchomić skrypt odpowiednio dla systemu operacyjnego:
+    - Windows: `windows.cmd`
+    - MacOS lub Linux: `macOs-i-Linux.sh`
 
 
 ## Jak znaleźć adres IP
