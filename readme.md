@@ -17,6 +17,17 @@ Pomocnik dla sztabu przy rozliczeniach wolontariuszy
 - Docker desktop (wybrać Docker Personal na stronie https://www.docker.com/products/docker-desktop i założyć darmowe konto)
 - Instalując na **Windows** zaznaczyć opcję "Use the WSL 2 instead of Hyper-V" w oknie instalatora.
 
+## Sprzęt na którym został program sprawdzony
+| Model | System operacyjny | RAM | Procesor | Działa? |
+| --- | --- | --- | --- | --- |
+| Raspberry Pi 4B | Ubuntu 20.04 | 4 GB | 4x 1.5 GHz | Tak |
+| Raspberry Pi 02w* | RaspberryPi OS Lite | 0.5 GB | 4x 1.2 GHz | Tak |
+| MacBook M1 | MacOS | 16 GB | 8x 3.2 GHz | Tak |
+| Laptop z 2015 DELL | Windows 10 | 8 GB | i7-7Uth 2x 2.0 GHz | Tak |
+| Laptop z 2015 DELL | Ubuntu 24.04 | 8 GB | i7-7Uth 2x 2.0 GHz | Tak |
+
+* najtańsza możliwa wersja dedykowana dla programu
+
 ## Instalacja
 1. Pobrać kod z https://git.kry008.xyz/kry008/WOSP-APP/releases lub https://github.com/kry008/WOSP-APP/releases
 1. Wejść w folder `serwer`
