@@ -12,5 +12,3 @@ ENV MYSQL_DATABASE=${MYSQL_DATABASE}
 ENV MYSQL_USER=${MYSQL_USER}
 ENV MYSQL_PASSWORD=${MYSQL_PASSWORD}
 
-# Kopiowanie skryptu SQL do inicjalizacji bazy danych
-COPY app/baza-import.sql /docker-entrypoint-initdb.d/

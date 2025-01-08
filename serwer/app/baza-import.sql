@@ -15,6 +15,8 @@ CREATE TABLE IF NOT EXISTS `login` (
   `aktywne` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
+INSERT INTO `login` (`id`, `login`, `haslo`, `kto`, `aktywne`) VALUES
+(NULL, 'szef', '0c1aba4f114d80faa3b08016fe94443462adadd7', 'Szef Sztabu', 1);
 
 CREATE TABLE IF NOT EXISTS `rozliczenie` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -155,6 +157,3 @@ CREATE OR REPLACE VIEW `suma_przeliczona2`  AS SELECT coalesce(`r`.`liczacy1`,`r
 DROP TABLE IF EXISTS `sumy`;
 
 CREATE OR REPLACE VIEW `sumy`  AS SELECT `rozliczenie`.`wolontariuszID` AS `wolontariuszID`, sum(`rozliczenie`.`1gr` * 0.01 + `rozliczenie`.`2gr` * 0.02 + `rozliczenie`.`5gr` * 0.05 + `rozliczenie`.`10gr` * 0.1 + `rozliczenie`.`20gr` * 0.2 + `rozliczenie`.`50gr` * 0.5 + `rozliczenie`.`1zl` + `rozliczenie`.`2zl` * 2 + `rozliczenie`.`5zl` * 5 + `rozliczenie`.`10zl` * 10 + `rozliczenie`.`20zl` * 20 + `rozliczenie`.`50zl` * 50 + `rozliczenie`.`100zl` * 100 + `rozliczenie`.`200zl` * 200 + `rozliczenie`.`500zl` * 500) AS `suma` FROM `rozliczenie` GROUP BY `rozliczenie`.`wolontariuszID` ;
-
-INSERT INTO `login` (`id`, `login`, `haslo`, `kto`, `aktywne`) VALUES
-(NULL, 'szef', '0c1aba4f114d80faa3b08016fe94443462adadd7', 'Szef Sztabu', 1);
