@@ -23,7 +23,7 @@ const {loger, sendToDiscord, sendEmail} = require('./func.js');
 
 apiLiczacy.use(function(req, res, next) {
     var token = req.headers.token || req.body.token;
-    con.query("SELECT * FROM tokenyLiczacy WHERE token = ? AND aktywny = 1", [token], function(err, result) {
+    con.query('SELECT * FROM tokenyLiczacy, liczacy WHERE token = ? AND aktywny = 1 AND tokenyLiczacy.userId = liczacy.id', [token], function(err, result) {
         if(result.length > 0) {
             var czas = new Date(result[0].czasAktywacji);
             var now = new Date();

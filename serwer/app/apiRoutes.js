@@ -30,7 +30,7 @@ api.post("/loginPanel", function(req, res) {
         //jeżeli znajdziesz wygeneruj token i zapamiętaj go w bazie
         if (result.length > 0) {
             var token = makeid(64);
-            con.query("INSERT INTO tokeny (token, userId) VALUES (?, ?)", [token, result[0].id], function(err, result) {
+            con.query("INSERT INTO tokeny (token, typ, userId) VALUES (?, 1, ?)", [token, result[0].id], function(err, result) {
                 res.send({response: "Zalogowano", token: token});
             });
         } else {
@@ -44,7 +44,7 @@ api.post("/loginLiczacy", function(req, res) {
     con.query("SELECT * FROM liczacy WHERE qr = ? AND aktywne = 1", [qr], function(err, result) {
         if(result.length > 0) {
             var token = makeid(64);
-            con.query("INSERT INTO tokenyLiczacy (token, userId) VALUES (?, ?)", [token, result[0].id], function(err, result) {
+            con.query("INSERT INTO tokenyLiczacy (token, typ, userId) VALUES (?, 1, ?)", [token, result[0].id], function(err, result) {
                 res.send({response: "Zalogowano", token: token});
             });
         } else {
