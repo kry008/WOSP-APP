@@ -105,5 +105,18 @@ apiLiczacy.get("/wyloguj", function(req, res) {
     });
 });
 
+apiLiczacy.get("/top10Liczacy", function(req, res) {
+    con.query("SELECT idLiczacego, imie, nazwisko, sumaPrzeliczona FROM `sumaPrzeliczona` ORDER BY `sumaPrzeliczona`.`sumaPrzeliczona` DESC LIMIT 10;", function(err, result) {
+        if (err) throw err;
+        res.send(result);
+    });
+});
+apiLiczacy.get("/top10Wolontariuszy", function(req, res) {
+    con.query('SELECT numerIdentyfikatora, imie, nazwisko, suma FROM `SumaZebranaPrzezWolontariuszy` ORDER BY `SumaZebranaPrzezWolontariuszy`.`suma` DESC LIMIT 10;', function(err, result) {
+        if (err) throw err;
+        res.send(result);
+    });
+});
+
 
 module.exports = apiLiczacy;
