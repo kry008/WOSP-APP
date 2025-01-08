@@ -31,7 +31,6 @@ liczacy.use(function(req, res, next) {
     con.query('SELECT * FROM tokenyLiczacy, liczacy WHERE token = ? AND aktywny = 1 AND tokenyLiczacy.userId = liczacy.id', [liczacy], function(err, result) {
         if (err) throw err;
         if (result.length > 0) {
-            //get from result imie
             req.user = result[0];
             next();
         } else {
