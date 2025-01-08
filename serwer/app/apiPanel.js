@@ -24,9 +24,6 @@ const {checkPesel, loger, sendToDiscord, sendEmail, makeid, checkSendEmail, baza
 
 //sprawdź czy token jest w bazie i jest 24h od generacji, jeżeli starszy zwróć że trzeba się zalogować ponownie
 apiPanel.use(function(req, res, next) {
-    console.log(req.headers);
-    console.log(req.body);
-    
     var token = req.headers.token || req.body.token;
     con.query('SELECT * FROM tokeny, login WHERE token = ? AND tokeny.userId = login.id AND aktywny = 1', [token], function(err, result) {
         if(result.length > 0) {
@@ -35,6 +32,7 @@ apiPanel.use(function(req, res, next) {
             if(now.getTime() - czas.getTime() > 86400000) {
                 res.send(403, {response: "Zaloguj się ponownie"});
             } else {
+                req.user = result[0];
                 next();
             }
         }
@@ -67,5 +65,33 @@ apiPanel.post("/liczacy", function(req, res) {
     });
 });
 
+apiPanel.get("/potwierdzRozliczenie", function(req, res) {
+    con.query('SELECT * FROM rozliczenie WHERE aktywne = 1 AND weryfikowal = 0 ORDER BY czasRozliczenia DESC', function(err, result) {
+        res.send(result);
+    });
+});
+
+apiPanel.get("/potwierdzRozliczenie/:id", function(req, res) {
+    var id = req.params.id;
+    con.query('SELECT * FROM rozliczenie WHERE id = ? AND aktywne = 1 AND weryfikowal = 0', [id], function(err, result) {
+        if(result.length > 0) {
+            res.send(result[0]);
+        } else {
+            res.send(403, {response: "Błąd, spróbuj ponownie"});
+        }
+    });
+});
+
+apiPanel.post("/potwierdzRozliczenie/:id", function(req, res) {
+    var id = req.params.id;
+    var idLiczacy = req.body.idLiczacy;
+    con.query('UPDATE rozliczenie SET weryfikowal = 1, idLiczacy = ? WHERE id = ? AND aktywne = 1 AND weryfikowal = 0', [idLiczacy, id], function(err, result) {
+        if(result.affectedRows > 0) {
+            res.send({response: "Potwierdzono"});
+        } else {
+            res.send(403, {response: "Błąd, spróbuj ponownie"});
+        }
+    });
+});
 
 module.exports = apiPanel;
