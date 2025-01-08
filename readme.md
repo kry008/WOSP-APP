@@ -29,8 +29,10 @@ Pomocnik dla sztabu przy rozliczeniach wolontariuszy
 * najtańsza możliwa wersja dedykowana dla programu
 
 ## Instalacja
+1. Zainstalować Docker desktop zgodnie z [Wymaganiami](#wymagania)
 1. Pobrać kod z https://git.kry008.xyz/kry008/WOSP-APP/releases lub https://github.com/kry008/WOSP-APP/releases
-1. Wejść w folder `serwer`
+1. Utworzyć folder i wypakować pliki do niego
+1. Wejść w folder `serwer` (z rozpakowanej paczki)
 1. Skopiować plik `example.env` i nazwać go `.env`
 1. Uzupełnić pola `MYSQL_ROOT_PASSWORD` oraz `MYSQL_PASSWORD` w pliku `.env`
 1. Skopiować plik `example.prod.env` i nazwać go `prod.env`
