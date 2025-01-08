@@ -146,7 +146,7 @@ liczacy.all('/statystyki2', function(req, res) {
         con.query('SELECT numerIdentyfikatora, imie, nazwisko, suma FROM `SumaZebranaPrzezWolontariuszy` ORDER BY `SumaZebranaPrzezWolontariuszy`.`suma` ASC LIMIT 10;', function(err, result) {
             if (err) throw err;
             result.forEach(function(row) {
-                toReturn += '<tr><td>' + row.numerIdentyfikatora + '</td><td>' + row.suma + '</td></tr>';
+                toReturn += '<tr><td>' + row.numerIdentyfikatora + '</td><td>' + Math.round(row.suma*100)/100 + '</td></tr>';
             });
             toReturn += '</table>';
             toReturn += '</div>';
@@ -158,7 +158,7 @@ liczacy.all('/statystyki2', function(req, res) {
             con.query("SELECT idLiczacego, imie, nazwisko, sumaPrzeliczona FROM `sumaPrzeliczona` ORDER BY `sumaPrzeliczona`.`sumaPrzeliczona` DESC LIMIT 10;", function(err, result) {
                 if (err) throw err;
                 result.forEach(function(row) {
-                    toReturn += '<tr><td>' + row.idLiczacego + '</td><td>' + row.sumaPrzeliczona + '</td></tr>';
+                    toReturn += '<tr><td>' + row.idLiczacego + '</td><td>' + Math.round(row.sumaPrzeliczona*100)/100 + '</td></tr>';
                 });
                 toReturn += '</table>';
                 toReturn += '</div>';
@@ -430,7 +430,7 @@ liczacy.get("/szybkieInfo", function(req, res) {
                 con.query("SELECT * FROM `rozliczenie`, `wolontariusz` WHERE `rozliczenie`.`wolontariuszID` = `wolontariusz`.`id` AND `rozliczenie`.`aktywne` = 1 ORDER BY `rozliczenie`.`czasRozliczenia` DESC LIMIT 5", function(err, result) {
                     if (err) throw err;
                     result.forEach(function(row) {
-                        toReturn += '<tr><td>' + row.numerIdentyfikatora + '</td><td>' + (row['1gr'] + row['2gr'] * 2 + row['5gr'] * 5 + row['10gr'] * 10 + row['20gr'] * 20 + row['50gr'] * 50 + row['1zl'] * 100 + row['2zl'] * 200 + row['5zl'] * 500 + row['10zl'] * 1000 + row['20zl'] * 2000 + row['50zl'] * 5000 + row['100zl'] * 10000 + row['200zl'] * 20000 + row['500zl'] * 50000 + row.sumaZTerminala * 100)/100.0 + ' zł</td></tr>';
+                        toReturn += '<tr><td>' + row.numerIdentyfikatora + '</td><td>' + Math.round((row['1gr'] + row['2gr'] * 2 + row['5gr'] * 5 + row['10gr'] * 10 + row['20gr'] * 20 + row['50gr'] * 50 + row['1zl'] * 100 + row['2zl'] * 200 + row['5zl'] * 500 + row['10zl'] * 1000 + row['20zl'] * 2000 + row['50zl'] * 5000 + row['100zl'] * 10000 + row['200zl'] * 20000 + row['500zl'] * 50000 + row.sumaZTerminala * 100))/100.0 + ' zł</td></tr>';
                     });
                     toReturn += '</table>';
                     toReturn += '</div>';

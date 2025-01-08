@@ -1278,7 +1278,7 @@ panelRouter.all('/statystyki', function(req, res) {
         con.query('SELECT numerIdentyfikatora, imie, nazwisko, suma FROM `SumaZebranaPrzezWolontariuszy` ORDER BY `SumaZebranaPrzezWolontariuszy`.`suma` DESC LIMIT 10;', function(err, result) {
             if (err) throw err;
             result.forEach(function(row) {
-                toReturn += '<tr><td>' + row.numerIdentyfikatora + '</td><td>' + row.imie + ' ' + row.nazwisko + '</td><td>' + row.suma + '</td></tr>';
+                toReturn += '<tr><td>' + row.numerIdentyfikatora + '</td><td>' + row.imie + ' ' + row.nazwisko + '</td><td>' + (Math.round(row.suma * 100)/100) + '</td></tr>';
             });
             toReturn += '</table>';
             toReturn += '</div>';
@@ -1290,7 +1290,7 @@ panelRouter.all('/statystyki', function(req, res) {
             con.query("SELECT idLiczacego, imie, nazwisko, sumaPrzeliczona FROM `sumaPrzeliczona` ORDER BY `sumaPrzeliczona`.`sumaPrzeliczona` DESC LIMIT 10;", function(err, result) {
                 if (err) throw err;
                 result.forEach(function(row) {
-                    toReturn += '<tr><td>' + row.idLiczacego + '</td><td>' + row.imie + ' ' + row.nazwisko + '</td><td>' + row.sumaPrzeliczona + '</td></tr>';
+                    toReturn += '<tr><td>' + row.idLiczacego + '</td><td>' + row.imie + ' ' + row.nazwisko + '</td><td>' + (Math.round(row.sumaPrzeliczona*100)/100) + '</td></tr>';
                 });
                 toReturn += '</table>';
                 toReturn += '</div>';

@@ -84,8 +84,13 @@ apiPanel.get("/potwierdzRozliczenie/:id", function(req, res) {
 
 apiPanel.post("/potwierdzRozliczenie/:id", function(req, res) {
     var id = req.params.id;
-    var idLiczacy = req.body.idLiczacy;
-    con.query('UPDATE rozliczenie SET weryfikowal = 1, idLiczacy = ? WHERE id = ? AND aktywne = 1 AND weryfikowal = 0', [idLiczacy, id], function(err, result) {
+    if(id == undefined)
+        return res.send(400, {response: "Błąd"});
+    con.query('UPDATE rozliczenie SET weryfikowal = ? WHERE id = ? AND aktywne = 1 AND weryfikowal = 0', [req.user.id, id], function(err, result) {
+        if (err){
+            loger(fs, 'Błąd: ' + err, 'error');
+            res.send(400, {response: "Błąd"});
+        }
         if(result.affectedRows > 0) {
             res.send({response: "Potwierdzono"});
         } else {
@@ -97,13 +102,19 @@ apiPanel.post("/potwierdzRozliczenie/:id", function(req, res) {
 
 apiPanel.get("/top10Liczacy", function(req, res) {
     con.query("SELECT idLiczacego, imie, nazwisko, sumaPrzeliczona FROM `sumaPrzeliczona` ORDER BY `sumaPrzeliczona`.`sumaPrzeliczona` DESC LIMIT 10;", function(err, result) {
-        if (err) throw err;
+        if (err){
+            loger(fs, 'Błąd: ' + err, 'error');
+            res.send(400, {response: "Błąd"});
+        }
         res.send(result);
     });
 });
 apiPanel.get("/top10Wolontariuszy", function(req, res) {
     con.query('SELECT numerIdentyfikatora, imie, nazwisko, suma FROM `SumaZebranaPrzezWolontariuszy` ORDER BY `SumaZebranaPrzezWolontariuszy`.`suma` DESC LIMIT 10;', function(err, result) {
-        if (err) throw err;
+        if (err){
+            loger(fs, 'Błąd: ' + err, 'error');
+            res.send(400, {response: "Błąd"});
+        }
         res.send(result);
     });
 });
