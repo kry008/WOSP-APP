@@ -64,7 +64,7 @@ function tryConnect() {
 
             const panelRoutes = require('./panelRoutes.js');
             const liczacy = require('./liczacy.js');
-            //const apiRoutes = require('./apiRoutes');
+            const apiRoutes = require('./apiRoutes.js');
 
             app.get('/', function(req, res) {
                 res.redirect('/panel');
@@ -187,7 +187,7 @@ function tryConnect() {
 
             app.use('/panel', panelRoutes);
             app.use('/liczacy', liczacy);
-            //app.use('/api', apiRoutes);
+            app.use('/api', apiRoutes);
 
             app.all('/statystyki2', function(req, res) {
                 var toReturn = headerHtml("Statystyki");
