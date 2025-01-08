@@ -58,6 +58,8 @@ api.use('/panel', apiPanel);
 const apiLiczacy = require('./apiLiczacy.js');
 api.use('/liczacy', apiLiczacy);
 
-
+api.all('*', function(req, res) {
+    res.send(404, {response: "Nie znaleziono"});
+});
 
 module.exports = api;
