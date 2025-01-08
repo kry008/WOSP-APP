@@ -25,7 +25,9 @@ api.use(bodyParser.json());
 api.post("/loginPanel", function(req, res) {
     var login = req.body.login;
     var password = req.body.password;
-    con.query("SELECT * FROM login WHERE login = ? AND haslo = ?", [login, password], function(err, result) {
+    console.log(req.body);
+    
+    con.query("SELECT * FROM login WHERE login = ? AND haslo = SHA1(?)", [login, password], function(err, result) {
         //jeżeli znajdziesz wygeneruj token i zapamiętaj go w bazie
         if (result.length > 0) {
             var token = makeid(64);

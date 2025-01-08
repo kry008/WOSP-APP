@@ -19,7 +19,7 @@ con.connect(function(err) {
 });
 var bodyParser = require('body-parser');
 apiLiczacy.use(bodyParser.json());
-const {loger, sendToDiscord, sendEmail, makeid, checkSendEmail, baza} = require('./func.js');
+const {loger, sendToDiscord, sendEmail} = require('./func.js');
 
 apiLiczacy.use(function(req, res, next) {
     var token = req.headers.token || req.body.token;

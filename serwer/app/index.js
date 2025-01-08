@@ -66,6 +66,10 @@ function tryConnect() {
             const liczacy = require('./liczacy.js');
             const apiRoutes = require('./apiRoutes.js');
 
+            app.use('/panel', panelRoutes);
+            app.use('/liczacy', liczacy);
+            app.use('/api', apiRoutes);
+
             app.get('/', function(req, res) {
                 res.redirect('/panel');
             });
@@ -183,11 +187,6 @@ function tryConnect() {
                 //redirect to /panel/home
                 res.redirect('/panel/home');
             });
-
-
-            app.use('/panel', panelRoutes);
-            app.use('/liczacy', liczacy);
-            app.use('/api', apiRoutes);
 
             app.all('/statystyki2', function(req, res) {
                 var toReturn = headerHtml("Statystyki");
